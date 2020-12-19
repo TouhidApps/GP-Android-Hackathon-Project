@@ -9,7 +9,7 @@ This is Kotlin based Android Studio Project.
 
 Build on Android Studio version 4.0.2
 
-NDK version: 21.0.6113669
+NDK version: 21.0.6113669 (NDK used to hide api key and base url)
 
 Clone the git repositor and import in Android Studio. It will take some time to initial build.
 

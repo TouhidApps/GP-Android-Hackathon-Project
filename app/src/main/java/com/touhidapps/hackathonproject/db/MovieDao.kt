@@ -8,13 +8,17 @@ import androidx.room.Query
 @Dao
 interface MovieDao {
 
-        @Query("SELECT * FROM " + DbConstraints.TABLE_MOVIES + " WHERE id LIKE :id")
+        @Query("SELECT * FROM " + DbConstraints.TABLE_MOVIES)
+        fun getAllItem() : List<MovieEntity>
+
+        @Query("SELECT * FROM " + DbConstraints.TABLE_MOVIES + " WHERE c_id=:id")
         fun getItem(id: Int) : MovieEntity
 
         @Insert
         fun insertItem(tvShow: MovieEntity)
 
-        @Delete
-        fun deleteItem(tvShow: MovieEntity)
+//        @Delete
+        @Query("DELETE FROM " + DbConstraints.TABLE_MOVIES + " WHERE c_id=:id")
+        fun deleteItem(id: Int)
 
 }

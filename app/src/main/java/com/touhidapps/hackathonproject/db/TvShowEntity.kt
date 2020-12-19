@@ -12,6 +12,9 @@ class TvShowEntity {
     @PrimaryKey(autoGenerate = true)
     var id = 0
 
+    @ColumnInfo(name = "c_id")
+    var contentId: String? = null
+
     @ColumnInfo(name = "name")
     var name: String? = null
 
@@ -28,7 +31,8 @@ class TvShowEntity {
 
     // To insert
     @Ignore // as multiple constructor is not allowed
-    constructor(name: String?, vote: String?, releaseDate: String?, imgPath: String?) {
+    constructor(contentId: String?, name: String?, vote: String?, releaseDate: String?, imgPath: String?) {
+        this.contentId = contentId
         this.name = name
         this.vote = vote
         this.releaseDate = releaseDate
@@ -37,8 +41,8 @@ class TvShowEntity {
 
     // To delete
     @Ignore
-    constructor(id: Int) {
-        this.id = id
+    constructor(contentId: String) {
+        this.contentId = contentId
     }
 
 }

@@ -2,7 +2,7 @@ package com.touhidapps.hackathonproject.model
 
 import com.google.gson.annotations.SerializedName
 
-   
+
 data class DiscoverMovie (
 
    @SerializedName("page") var page : Int,
@@ -27,7 +27,7 @@ data class ResultsMovie (
    @SerializedName("release_date") var releaseDate : String,
    @SerializedName("title") var title : String,
    @SerializedName("video") var video : Boolean,
-   @SerializedName("vote_average") var voteAverage : Int,
+   @SerializedName("vote_average") var voteAverage : Double,
    @SerializedName("vote_count") var voteCount : Int
 
 )

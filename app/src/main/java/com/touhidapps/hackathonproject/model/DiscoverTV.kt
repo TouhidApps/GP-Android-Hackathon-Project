@@ -25,7 +25,7 @@ data class ResultsTV (
    @SerializedName("overview") var overview : String,
    @SerializedName("popularity") var popularity : Double,
    @SerializedName("poster_path") var posterPath : String,
-   @SerializedName("vote_average") var voteAverage : Int,
+   @SerializedName("vote_average") var voteAverage : Double,
    @SerializedName("vote_count") var voteCount : Int
 
 )

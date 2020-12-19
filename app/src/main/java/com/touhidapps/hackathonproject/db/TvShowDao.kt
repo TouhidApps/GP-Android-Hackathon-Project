@@ -8,12 +8,19 @@ import androidx.room.Query
 @Dao
 interface TvShowDao {
 
-        @Query("SELECT * FROM " + DbConstraints.TABLE_TV_SHOWS + " WHERE id LIKE :id")
-        fun getItem(id: Int) : TvShowEntity
+        @Query("SELECT * FROM " + DbConstraints.TABLE_TV_SHOWS)
+        fun getAllItem() : List<TvShowEntity>
+
+        @Query("SELECT * FROM " + DbConstraints.TABLE_TV_SHOWS + " WHERE c_id=:id")
+        fun getItem(id: String) : TvShowEntity
 
         @Insert
         fun insertItem(tvShow: TvShowEntity)
 
-        @Delete
-        fun deleteItem(tvShow: TvShowEntity)
+//        @Delete
+        @Query("DELETE FROM " + DbConstraints.TABLE_TV_SHOWS + " WHERE c_id=:id")
+        fun deleteItem(id: Int)
+
 }
+
+

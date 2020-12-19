@@ -11,6 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 abstract class ContentDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao?
+    abstract fun tvShowDao(): TvShowDao?
 
     companion object {
 
@@ -22,18 +23,18 @@ abstract class ContentDatabase : RoomDatabase() {
                     context.applicationContext,
                     ContentDatabase::class.java, "my_movie.db"
                 )
-//                    .addMigrations(MIGRATION_1_2)
-                    .allowMainThreadQueries()
+                    .addMigrations(MIGRATION_1_2)
+//                    .allowMainThreadQueries()
                     .build()
             }
             return contentDatabase
         }
 
-//        var MIGRATION_1_2 = object: Migration(0, 1) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                movieDatabase?.query("ALTER TABLE " + " ADD COLUMN last_update INTEGER", null)
-//            }
-//        }
+        var MIGRATION_1_2 = object: Migration(0, 1) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //
+            }
+        }
 
 
 

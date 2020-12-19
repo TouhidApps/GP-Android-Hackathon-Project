@@ -7,6 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.touhidapps.hackathonproject.databinding.FragmentDetailViewBinding
+import com.touhidapps.hackathonproject.db.ContentDatabase
+import com.touhidapps.hackathonproject.db.MovieEntity
+import com.touhidapps.hackathonproject.db.TvShowEntity
+import com.touhidapps.hackathonproject.model.MovieDetailModel
+import com.touhidapps.hackathonproject.model.TVDetailModel
 import com.touhidapps.hackathonproject.networkService.MyApiUrl
 import com.touhidapps.hackathonproject.utils.MyDataType
 import com.touhidapps.hackathonproject.utils.loadMyImage
@@ -19,7 +24,13 @@ class DetailViewFragment : Fragment() {
     private lateinit var videoViewModel: VideoViewModel
 
     var myDataType = MyDataType.MOVIES
-    var contentId : Int = 0
+    var contentId: Int = 0
+
+    private var isWishListed: Boolean = false
+
+    private var contentDatabase: ContentDatabase? = null
+    private var movieDetailModel: MovieDetailModel? = null
+    private var tVDetailModel: TVDetailModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +45,10 @@ class DetailViewFragment : Fragment() {
 
         videoViewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
 
+        activity?.let {
+            contentDatabase = ContentDatabase.getInstance(it)
+        }
+
         initUI()
         listeners()
         observers()
@@ -46,10 +61,65 @@ class DetailViewFragment : Fragment() {
 
 
 
+
     } // initUI
+
+
 
     private fun listeners() {
 
+        binding.btnWishList.setOnClickListener {
+
+            if (isWishListed) {
+                // Add to Wishlist
+                binding.btnWishList.text = "Add To Wishlist"
+                if (myDataType == MyDataType.MOVIES) {
+                    movieDetailModel?.id?.let {
+                        Thread {
+                            contentDatabase?.movieDao()?.deleteItem(it)
+                        }.start()
+                    }
+                } else {
+                    tVDetailModel?.id?.let {
+                        Thread {
+                            contentDatabase?.tvShowDao()?.deleteItem(it)
+                        }.start()
+                    }
+                }
+
+            } else {
+                // Remove from Wishlist
+                binding.btnWishList.text = "Remove From Wishlist"
+                if (myDataType == MyDataType.MOVIES) {
+                    Thread {
+                        contentDatabase?.movieDao()?.insertItem(
+                            MovieEntity(
+                                contentId = "${movieDetailModel?.id}",
+                                name = "${movieDetailModel?.title}",
+                                vote = "${movieDetailModel?.voteAverage}",
+                                releaseDate = "${movieDetailModel?.releaseDate}",
+                                imgPath = "${movieDetailModel?.posterPath}"
+                            )
+                        )
+                    }.start()
+
+                } else {
+                    Thread {
+                        contentDatabase?.tvShowDao()?.insertItem(
+                            TvShowEntity(
+                                contentId = "${tVDetailModel?.id}",
+                                name = "${tVDetailModel?.name}",
+                                vote = "${tVDetailModel?.voteAverage}",
+                                releaseDate = "${tVDetailModel?.firstAirDate}",
+                                imgPath = "${tVDetailModel?.posterPath}"
+                            )
+                        )
+                    }.start()
+                }
+
+            }
+
+        }
 
 
     } // listeners
@@ -58,29 +128,70 @@ class DetailViewFragment : Fragment() {
 
         videoViewModel.movieDetailModel.observeForever {
 
+            this.movieDetailModel = it
+
             binding.ivThumb.loadMyImage("${MyApiUrl.BASE_URL_POSTER}${it.posterPath}", true)
             binding.tvName.text = "Name: ${it.title}"
             binding.tvVote.text = "Vote: ${it.voteAverage}"
             binding.tvReleaseDate.text = "Release Date: ${it.releaseDate}"
 
+            checkForLabel()
+
         }
 
         videoViewModel.tVDetailModel.observeForever {
+
+            this.tVDetailModel = it
 
             binding.ivThumb.loadMyImage("${MyApiUrl.BASE_URL_POSTER}${it.posterPath}", true)
             binding.tvName.text = "Name: ${it.name}"
             binding.tvVote.text = "Vote: ${it.voteAverage}"
             binding.tvReleaseDate.text = "${it.firstAirDate}"
 
+            checkForLabel()
+
         }
 
     } // observers
 
+
+    //
+    private fun checkForLabel() {
+        if (myDataType == MyDataType.MOVIES) {
+            movieDetailModel?.id?.let {
+                Thread {
+                    val movEnt = contentDatabase?.movieDao()?.getItem(it)
+                    isWishListed = movEnt != null
+                    labelChangeOfWishListed()
+                }.start()
+
+            }
+        } else {
+            tVDetailModel?.id?.let {
+                Thread {
+                    val tvEnt = contentDatabase?.tvShowDao()?.getItem("${it}")
+                    isWishListed = tvEnt != null
+                    labelChangeOfWishListed()
+                }.start()
+            }
+        }
+    }
+
+    private fun labelChangeOfWishListed() {
+        activity?.runOnUiThread {
+            if (isWishListed) {
+                binding.btnWishList.text = "Remove From Wishlist"
+            } else {
+                binding.btnWishList.text = "Add To Wishlist"
+            }
+        }
+    }
+
     private fun loadData() {
 
-        if (myDataType ==  MyDataType.MOVIES) {
+        if (myDataType == MyDataType.MOVIES) {
             videoViewModel.movieDetails(binding.spinKit, contentId, MyApiUrl.API_KEY)
-        } else if (myDataType ==  MyDataType.TV_SERIES) {
+        } else if (myDataType == MyDataType.TV_SERIES) {
             videoViewModel.tvDetails(binding.spinKit, contentId, MyApiUrl.API_KEY)
         }
 

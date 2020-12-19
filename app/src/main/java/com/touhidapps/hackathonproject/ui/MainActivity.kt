@@ -16,6 +16,7 @@ import com.touhidapps.hackathonproject.model.ResultsTV
 import com.touhidapps.hackathonproject.model.ResultsTrendingWeek
 import com.touhidapps.hackathonproject.networkService.MyApiUrl
 import com.touhidapps.hackathonproject.ui.fragments.DetailViewFragment
+import com.touhidapps.hackathonproject.ui.fragments.WishListFragment
 import com.touhidapps.hackathonproject.utils.MyDataType
 import com.touhidapps.hackathonproject.viewModel.VideoViewModel
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var videoViewModel: VideoViewModel
 
     private lateinit var detailViewFragment: DetailViewFragment
+    private lateinit var wishListFragment: WishListFragment
 
     private var movies = arrayListOf<ResultsMovie>()
     private var tvs = arrayListOf<ResultsTV>()
@@ -45,7 +47,6 @@ class MainActivity : AppCompatActivity() {
 
         videoViewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
 
-        detailViewFragment = DetailViewFragment()
 
         initUI()
 
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         movieAdapter.setItemClick {
 
+            detailViewFragment = DetailViewFragment()
             detailViewFragment.myDataType = MyDataType.MOVIES
             detailViewFragment.contentId = it.id
 
@@ -95,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         tvAdapter.setItemClick {
-
+            detailViewFragment = DetailViewFragment()
             detailViewFragment.myDataType = MyDataType.TV_SERIES
             detailViewFragment.contentId = it.id
 
@@ -118,6 +120,27 @@ class MainActivity : AppCompatActivity() {
 
         trendingAdapter.setItemClick {
             Toast.makeText(this, "No event", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.wishList.setOnClickListener {
+
+            wishListFragment = WishListFragment()
+
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("wishListFragment")
+                .setCustomAnimations(
+                    R.anim.enter,
+                    R.anim.exit,
+                    R.anim.pop_enter,
+                    R.anim.pop_exit
+                )
+                .add(
+                    R.id.frameLayout,
+                    wishListFragment
+                )
+                .commit()
+
         }
 
     } // listeners

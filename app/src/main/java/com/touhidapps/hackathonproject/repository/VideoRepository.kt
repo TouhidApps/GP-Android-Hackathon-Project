@@ -3,9 +3,7 @@ package com.touhidapps.hackathonproject.repository
 import android.app.Application
 import android.view.View
 import android.widget.Toast
-import com.touhidapps.hackathonproject.model.DiscoverMovie
-import com.touhidapps.hackathonproject.model.DiscoverTV
-import com.touhidapps.hackathonproject.model.TrendingWeek
+import com.touhidapps.hackathonproject.model.*
 import com.touhidapps.hackathonproject.networkService.RetrofitClient
 import com.touhidapps.hackathonproject.utils.invisible
 import com.touhidapps.hackathonproject.utils.visible
@@ -16,13 +14,13 @@ class VideoRepository(var application: Application) {
 
     fun discoverMovie(
         loadingView: View?,
-        mobileNo: String,
+        key: String,
         releaseYear: String,
         sortBy: String,
         completion: (DiscoverMovie) -> Unit
     ) {
         loadingView?.visible()
-        val d = RetrofitClient.instance()?.discoverMovie(mobileNo, releaseYear, sortBy)
+        val d = RetrofitClient.instance()?.discoverMovie(key, releaseYear, sortBy)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(
@@ -41,13 +39,13 @@ class VideoRepository(var application: Application) {
 
     fun discoverTv(
         loadingView: View?,
-        mobileNo: String,
+        key: String,
         releaseYear: String,
         sortBy: String,
         completion: (DiscoverTV) -> Unit
     ) {
         loadingView?.visible()
-        val d = RetrofitClient.instance()?.discoverTv(mobileNo, releaseYear, sortBy)
+        val d = RetrofitClient.instance()?.discoverTv(key, releaseYear, sortBy)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(
@@ -66,11 +64,11 @@ class VideoRepository(var application: Application) {
 
     fun trendingWeek(
         loadingView: View?,
-        mobileNo: String,
+        key: String,
         completion: (TrendingWeek) -> Unit
     ) {
         loadingView?.visible()
-        val d = RetrofitClient.instance()?.trendingWeek(mobileNo)
+        val d = RetrofitClient.instance()?.trendingWeek(key)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(
@@ -86,6 +84,54 @@ class VideoRepository(var application: Application) {
             )
 
     } // trendingWeek
+
+    fun movieDetails(
+        loadingView: View?,
+        id: Int,
+        key: String,
+        completion: (MovieDetailModel) -> Unit
+    ) {
+        loadingView?.visible()
+        val d = RetrofitClient.instance()?.movieDetails(id, key)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(
+                { mData ->
+                    loadingView?.invisible()
+                    completion(mData)
+                },
+                {
+                    loadingView?.invisible()
+                    it.printStackTrace()
+                    Toast.makeText(application, "Something wrong.", Toast.LENGTH_SHORT).show()
+                }
+            )
+
+    } // movieDetails
+
+    fun tvDetails(
+        loadingView: View?,
+        id: Int,
+        key: String,
+        completion: (TVDetailModel) -> Unit
+    ) {
+        loadingView?.visible()
+        val d = RetrofitClient.instance()?.tvDetails(id, key)
+            ?.subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(
+                { mData ->
+                    loadingView?.invisible()
+                    completion(mData)
+                },
+                {
+                    loadingView?.invisible()
+                    it.printStackTrace()
+                    Toast.makeText(application, "Something wrong.", Toast.LENGTH_SHORT).show()
+                }
+            )
+
+    } // tvDetails
 
 
 }

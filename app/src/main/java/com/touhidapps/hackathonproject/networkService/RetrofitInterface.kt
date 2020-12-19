@@ -1,8 +1,6 @@
 package com.touhidapps.hackathonproject.networkService
 
-import com.touhidapps.hackathonproject.model.DiscoverMovie
-import com.touhidapps.hackathonproject.model.DiscoverTV
-import com.touhidapps.hackathonproject.model.TrendingWeek
+import com.touhidapps.hackathonproject.model.*
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -26,6 +24,24 @@ interface RetrofitInterface {
     fun trendingWeek(
         @Query("api_key") apiKey: String
     ): Single<TrendingWeek>
+
+    @GET(MyApiUrl.MOVIE_DETAILS + "/{id}")
+    fun movieDetails(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String
+    ): Single<MovieDetailModel>
+
+    @GET(MyApiUrl.TV_DETAILS + "/{id}")
+    fun tvDetails(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String
+    ): Single<TVDetailModel>
+
+
+
+
+
+
 
 }
 

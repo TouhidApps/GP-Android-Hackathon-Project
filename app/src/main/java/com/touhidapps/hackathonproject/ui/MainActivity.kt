@@ -1,10 +1,12 @@
-package com.touhidapps.hackathonproject
+package com.touhidapps.hackathonproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.touhidapps.hackathonproject.R
 import com.touhidapps.hackathonproject.adapters.MovieAdapter
 import com.touhidapps.hackathonproject.adapters.TVAdapter
 import com.touhidapps.hackathonproject.adapters.TrendingAdapter
@@ -13,6 +15,8 @@ import com.touhidapps.hackathonproject.model.ResultsMovie
 import com.touhidapps.hackathonproject.model.ResultsTV
 import com.touhidapps.hackathonproject.model.ResultsTrendingWeek
 import com.touhidapps.hackathonproject.networkService.MyApiUrl
+import com.touhidapps.hackathonproject.ui.fragments.DetailViewFragment
+import com.touhidapps.hackathonproject.utils.MyDataType
 import com.touhidapps.hackathonproject.viewModel.VideoViewModel
 
 
@@ -23,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var videoViewModel: VideoViewModel
+
+    private lateinit var detailViewFragment: DetailViewFragment
 
     private var movies = arrayListOf<ResultsMovie>()
     private var tvs = arrayListOf<ResultsTV>()
@@ -38,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         videoViewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
+
+        detailViewFragment = DetailViewFragment()
 
         initUI()
 
@@ -64,7 +72,53 @@ class MainActivity : AppCompatActivity() {
 
     private fun listeners() {
 
+        movieAdapter.setItemClick {
 
+            detailViewFragment.myDataType = MyDataType.MOVIES
+            detailViewFragment.contentId = it.id
+
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("detailViewFragment")
+                .setCustomAnimations(
+                    R.anim.enter,
+                    R.anim.exit,
+                    R.anim.pop_enter,
+                    R.anim.pop_exit
+                )
+                .add(
+                    R.id.frameLayout,
+                    detailViewFragment
+                )
+                .commit()
+
+        }
+
+        tvAdapter.setItemClick {
+
+            detailViewFragment.myDataType = MyDataType.TV_SERIES
+            detailViewFragment.contentId = it.id
+
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("detailViewFragment")
+                .setCustomAnimations(
+                    R.anim.enter,
+                    R.anim.exit,
+                    R.anim.pop_enter,
+                    R.anim.pop_exit
+                )
+                .add(
+                    R.id.frameLayout,
+                    detailViewFragment
+                )
+                .commit()
+
+        }
+
+        trendingAdapter.setItemClick {
+            Toast.makeText(this, "No event", Toast.LENGTH_SHORT).show()
+        }
 
     } // listeners
 

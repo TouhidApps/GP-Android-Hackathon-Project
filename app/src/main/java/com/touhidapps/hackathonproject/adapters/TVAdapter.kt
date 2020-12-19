@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.touhidapps.hackathonproject.databinding.RowMovieItemBinding
+import com.touhidapps.hackathonproject.databinding.RowMovieItemHorizontalBinding
 import com.touhidapps.hackathonproject.model.ResultsTV
 import com.touhidapps.hackathonproject.networkService.MyApiUrl
 import com.touhidapps.hackathonproject.utils.loadMyImage
@@ -19,7 +19,7 @@ class TVAdapter(private var items: List<ResultsTV>) : RecyclerView.Adapter<TVAda
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = RowMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowMovieItemHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -39,7 +39,7 @@ class TVAdapter(private var items: List<ResultsTV>) : RecyclerView.Adapter<TVAda
         return items.size
     }
 
-    inner class MyViewHolder(@NonNull val itemBinding: RowMovieItemBinding) :
+    inner class MyViewHolder(@NonNull val itemBinding: RowMovieItemHorizontalBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
         init {

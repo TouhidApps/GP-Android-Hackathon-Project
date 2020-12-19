@@ -4,9 +4,7 @@ import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.touhidapps.hackathonproject.model.DiscoverMovie
-import com.touhidapps.hackathonproject.model.DiscoverTV
-import com.touhidapps.hackathonproject.model.TrendingWeek
+import com.touhidapps.hackathonproject.model.*
 import com.touhidapps.hackathonproject.repository.VideoRepository
 
 class VideoViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,6 +14,9 @@ class VideoViewModel(application: Application) : AndroidViewModel(application) {
     var discoverMovie = MutableLiveData<DiscoverMovie>()
     var discoverTv = MutableLiveData<DiscoverTV>()
     var trendingWeek = MutableLiveData<TrendingWeek>()
+
+    var movieDetailModel = MutableLiveData<MovieDetailModel>()
+    var tVDetailModel = MutableLiveData<TVDetailModel>()
 
     fun discoverMovie(loadingView: View?, apiKey: String, releaseYear: String, sortBy: String) {
 
@@ -40,6 +41,22 @@ class VideoViewModel(application: Application) : AndroidViewModel(application) {
         }
 
     } // trendingWeek
+
+    fun movieDetails(loadingView: View?, id: Int, apiKey: String) {
+
+        videoRepository.movieDetails(loadingView, id, apiKey) {
+            movieDetailModel.value = it
+        }
+
+    } // movieDetails
+
+    fun tvDetails(loadingView: View?, id: Int, apiKey: String) {
+
+        videoRepository.tvDetails(loadingView, id, apiKey) {
+            tVDetailModel.value = it
+        }
+
+    } // tvDetails
 
 
 }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import com.touhidapps.hackathonproject.databinding.RowMovieItemBinding
+import com.touhidapps.hackathonproject.databinding.RowMovieItemHorizontalBinding
 import com.touhidapps.hackathonproject.model.ResultsMovie
 import com.touhidapps.hackathonproject.networkService.MyApiUrl
 import com.touhidapps.hackathonproject.utils.loadMyImage
@@ -20,7 +20,7 @@ class MovieAdapter(private var items: List<ResultsMovie>) : RecyclerView.Adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = RowMovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowMovieItemHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -40,7 +40,7 @@ class MovieAdapter(private var items: List<ResultsMovie>) : RecyclerView.Adapter
         return items.size
     }
 
-    inner class MyViewHolder(@NonNull val itemBinding: RowMovieItemBinding) :
+    inner class MyViewHolder(@NonNull val itemBinding: RowMovieItemHorizontalBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
         init {

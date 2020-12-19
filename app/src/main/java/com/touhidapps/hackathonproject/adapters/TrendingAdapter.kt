@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.touhidapps.hackathonproject.databinding.RowMovieItemBinding
 import com.touhidapps.hackathonproject.databinding.RowMovieItemVerticalBinding
 import com.touhidapps.hackathonproject.model.ResultsTrendingWeek
 import com.touhidapps.hackathonproject.networkService.MyApiUrl

@@ -15,7 +15,6 @@ object RetrofitClient {
 
     private const val TAG = "RetrofitClient"
 
-    private var retrofit: Retrofit? = null
     private var retrofitCache: Retrofit? = null
 
     private const val CACHE_SIZE: Long = 5 * 1024 * 1024 // 5MB cache size
@@ -26,25 +25,6 @@ object RetrofitClient {
     private val gson = GsonBuilder().setLenient().create()
 
     fun instance(): RetrofitInterface? {
-        if (retrofit == null) {
-
-            val okHttpClient = OkHttpClient.Builder()
-                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .build()
-
-            retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // verifies we are using RxJava2 for this API call
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(MyApiUrl.BASE_URL)
-                .client(okHttpClient)
-                .build()
-
-        }
-        return retrofit?.create(RetrofitInterface::class.java)
-    } // instance
-
-    fun instanceCache(): RetrofitInterface? {
         if (retrofitCache == null) {
 
             val okHttpClient = OkHttpClient.Builder()
@@ -67,7 +47,6 @@ object RetrofitClient {
         }
         return retrofitCache?.create(RetrofitInterface::class.java)
     } // instanceCache
-
 
     private fun cache(): Cache {
         return Cache(

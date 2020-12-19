@@ -60,10 +60,14 @@ class DetailViewFragment : Fragment() {
     private fun initUI() {
 
 
+        if (myDataType == MyDataType.MOVIES) {
+            binding.tvMainTitle.text = "Movie Detail"
+        } else {
+            binding.tvMainTitle.text = "TV Series Detail"
+        }
 
 
     } // initUI
-
 
 
     private fun listeners() {

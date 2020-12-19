@@ -37,12 +37,6 @@ interface RetrofitInterface {
         @Query("api_key") apiKey: String
     ): Single<TVDetailModel>
 
-
-
-
-
-
-
 }
 
 
